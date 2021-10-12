@@ -1,0 +1,3 @@
+Running savilerow. I found 44 solutions
+I constructed 44 L-algebras in 708ms (= 0:00:00.708)
+gap> construct_L(5);

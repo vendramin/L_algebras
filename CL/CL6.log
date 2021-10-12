@@ -1,0 +1,3 @@
+Running savilerow. I found 186 solutions
+I constructed 186 CL-algebras in 20939ms (= 0:00:20.939)
+gap> construct_CL(7);
