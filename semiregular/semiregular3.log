@@ -1,0 +1,3 @@
+Running savilerow. I found 3 solutions
+I constructed 3 semiregular L-algebras in 629ms (= 0:00:00.629)
+gap> construct_semiregular(4);
