@@ -1,0 +1,3 @@
+Running savilerow. I found 250 solutions
+I constructed 250 cycloid-algebras in 678ms (= 0:00:00.678)
+gap> construct_cycloid(4);
