@@ -3,3 +3,4 @@ rm *.eprime
 rm *.info
 rm *.infor
 rm *.minion
+rm output*
