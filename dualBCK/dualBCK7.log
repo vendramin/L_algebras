@@ -1,3 +1,0 @@
-Running savilerow. I found 1090 solutions
-I constructed 1090 dualBCK algebras in 45257ms (= 0:00:45.257)
-gap> construct_dualBCK(3);
