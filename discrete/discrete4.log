@@ -1,0 +1,3 @@
+Running savilerow. I found 15 solutions
+I constructed 15 discrete L-algebras in 466ms (= 0:00:00.466)
+gap> construct_discrete(5);
