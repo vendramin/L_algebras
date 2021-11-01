@@ -155,7 +155,7 @@ is_ideal := function(obj, subset)
       if not obj[obj[x][y]][y] in subset then
         return false;
       fi;
-      if obj[y][x] in subset and not obj[y][obj[x][y]] in subset then
+      if not obj[y][x] in subset or not obj[y][obj[x][y]] in subset then
         return false;
       fi;
     od;
