@@ -138,4 +138,63 @@ is_regular := function(obj)
    return true;
 end;
 
+is_ideal := function(obj, subset)
+  local n, x, y;
 
+  n := Size(obj);
+  
+  if not n in subset then
+    return false;
+  fi;
+  
+  for x in subset do
+    for y in [1..n] do
+      if obj[x][y] in subset and not y in subset then
+        return false;
+      fi;
+      if not obj[obj[x][y]][y] in subset then
+        return false;
+      fi;
+      if obj[y][x] in subset and not obj[y][obj[x][y]] in subset then
+        return false;
+      fi;
+    od;
+  od;
+  return true;
+end;
+
+ideals := function(obj)
+  local c, l, n, subset;
+  n := Size(obj);
+  l := [];
+  for c in IteratorOfCombinations([1..n]) do
+    if not n in c then
+      continue;
+    fi;
+    if is_ideal(obj, c) then
+      Add(l, c);
+    fi;
+  od;
+  return l;
+end;
+
+joint := function(obj, I, J)
+  local l;  
+  l := Filtered(ideals(obj), x->IsSubset(x, Union(I,J)));
+  return Iterated(l, Intersection);
+end;
+
+is_distributive := function(obj)
+  local l, x, y, z;
+  l := ideals(obj);
+  for x in l do
+    for y in l do
+      for z in l do
+        if not Intersection(x, joint(obj, y, z)) = joint(obj, Intersection(x, y), Intersection(x, z)) then
+          return false;
+        fi;
+      od;
+    od;
+  od;
+  return true;
+end;
