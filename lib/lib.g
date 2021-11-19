@@ -85,6 +85,15 @@ is_CL := function(obj)
   return true;
 end;
 
+is_prime_element := function(obj, p)
+  local n;
+  n := Size(obj);
+  if p=n then 
+    return false;
+  fi;
+  return ForAll([1..n], x->leq(obj, x, p) or obj[x][p]=p);
+end;
+
 is_prime := function(obj)
   local x, p, n;
   n := Size(obj);
@@ -198,3 +207,13 @@ is_distributive := function(obj)
   od;
   return true;
 end;
+
+is_simple := function(obj)
+  if Size(ideals(obj))=2 then
+    return true;
+  else
+    return false;
+  fi;
+end;
+
+
