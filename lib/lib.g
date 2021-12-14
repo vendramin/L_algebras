@@ -216,4 +216,17 @@ is_simple := function(obj)
   fi;
 end;
 
+poset := function(obj)
+  local l, x, y, n;
+  n := Size(obj);
+  l := [];
+  for x in [1..n] do
+    for y in [1..n] do
+      if obj[x][y] = n then
+        Add(l, [x, y]);
+      fi;
+    od;
+  od;
+  return Set(l);
+end;
 
