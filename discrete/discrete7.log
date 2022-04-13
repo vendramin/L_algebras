@@ -1,11 +1,3 @@
 Running savilerow. There are 151846 discrete L-algebras in 
 982890ms (= 0:16:22.890)
-gap> st.gi:2180 called from 
-Flat( twist_matrix( m, p ) ) at discrete_partial.g:76 called from
-is_minimal( m ) at discrete_partial.g:111 called from
-keep_discrete( n, output ) at discrete_partial.g:188 called from
-<function "construct_discrete">( <arguments> )
- called from read-eval loop at *stdin*:3
-you can 'return;'
-brk> Running savilerow. 
-gap> 
+gap>
