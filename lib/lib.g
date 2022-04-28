@@ -1,3 +1,7 @@
+logical_unit := function(obj)
+  return obj[1][1];
+end;
+
 leq := function(obj, x, y)
   return (obj[x][y] = Size(obj));
 end;
@@ -6,10 +10,19 @@ interval := function(obj, x)
   return Filtered([1..Size(obj)], y->leq(obj, y, x));
 end;
 
+down_set := function(obj, y)
+  return Filtered([1..Size(obj)], z->leq(obj, z, y));
+end;
+
 is_selfsimilar := function(obj)
-  local n,m;
+  local n, y;
   n := Size(obj);
-  m := NullMat(n,n);
+  for y in [1..n] do
+    if Size(Set(down_set(obj, y))) <> n then
+      return false;
+    fi;
+  od;
+  return true;
 end;
 
 is_semiregular := function(obj)
@@ -85,6 +98,7 @@ is_CL := function(obj)
   return true;
 end;
 
+# Is an element of an L-algebra prime?
 is_prime_element := function(obj, p)
   local n;
   n := Size(obj);
@@ -94,6 +108,11 @@ is_prime_element := function(obj, p)
   return ForAll([1..n], x->leq(obj, x, p) or obj[x][p]=p);
 end;
 
+prime_elements := function(obj)
+  return Filtered([1..Size(obj)], z->is_prime_element(obj, z));
+end;
+
+# Is an L-algebra prime?
 is_prime := function(obj)
   local x, p, n;
   n := Size(obj);
@@ -193,6 +212,40 @@ joint := function(obj, I, J)
   return Iterated(l, Intersection);
 end;
 
+ideal_generated_by := function(obj, subset)
+  local f;
+  f := Filtered(ideals(obj), x->not Intersection(subset, x) = []);
+  return Iterated(f, Intersection);
+end;
+
+# computes the dot product of ideals I and J
+# By definition, it is the largest ideal K of X 
+# such that X cap I is included in J
+dot := function(obj, I, J)
+  local l, f;
+
+  l := ideals(obj);
+  f := Filtered(l, K->IsSubset(J, Intersection(K, I)));
+  Sort(f, function(u,v) return Size(u) < Size(v); end);
+  return Set(Reversed(f)[1]);
+end;
+
+spatial_locale := function(obj)
+  local l, x, y, i, j, m;
+
+  l := List(ideals(obj), Set);
+  m := NullMat(Size(l), Size(l));
+
+  for x in l do
+    i := Position(l, x);
+    for y in l do
+      j := Position(l, y);
+      m[i][j] := Position(l, dot(obj, x, y));
+    od;
+  od;
+  return m;
+end;
+
 is_distributive := function(obj)
   local l, x, y, z;
   l := ideals(obj);
@@ -230,3 +283,51 @@ poset := function(obj)
   return Set(l);
 end;
 
+is_prime_ideal := function(obj, subset)
+  local x, l;
+
+  if not is_ideal(obj, subset) then
+    return false;
+  fi;
+
+  if Size(subset)=Size(obj) then
+    return false;
+  fi;
+
+  l := ideals(obj);
+
+  for x in l do
+    if not (IsSubset(x, subset) or IsSubset(dot(obj, x, subset), subset)) then
+      return false;
+    fi;
+  od;
+  return true;
+end;
+
+prime_ideals := function(obj)
+  return Filtered(ideals(obj), x->is_prime_ideal(obj, x));
+end;
+
+
+is_quasi_prime := function(obj, x)
+  local I, J, l;
+  
+  if x = logical_unit(obj) then
+    return false;
+  fi;
+
+  l := ideals(obj);
+  
+  for I in l do
+    for J in l do
+      if x in joint(obj, I, J) and not x in Union(I, J) then
+        return false;
+      fi;
+    od;
+  od;
+  return true;
+end;
+
+quasi_prime_elements := function(obj)
+  return Filtered([1..Size(obj)], x->is_quasi_prime(obj, x));
+end;
