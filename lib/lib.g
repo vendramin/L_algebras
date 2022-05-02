@@ -218,6 +218,10 @@ ideal_generated_by := function(obj, subset)
   return Iterated(f, Intersection);
 end;
 
+principal_ideal := function(obj, x)
+  return ideal_generated_by(obj, [x]);
+end;
+
 # computes the dot product of ideals I and J
 # By definition, it is the largest ideal K of X 
 # such that X cap I is included in J
@@ -331,3 +335,60 @@ end;
 quasi_prime_elements := function(obj)
   return Filtered([1..Size(obj)], x->is_quasi_prime(obj, x));
 end;
+
+spec := function(obj)
+  return prime_ideals(obj);
+end;
+
+is_dense := function(obj, x)
+  local y;
+  for y in [1..Size(obj)] do
+    if obj[x][y] = y and leq(obj, y, x) then
+      return true;
+    fi;
+  od;
+  return false;
+end;
+
+dense_elements := function(obj)
+  return Filtered([1..Size(obj)], x->is_dense(obj, x));
+end;
+
+is_regular := function(obj, x)
+  local y;
+  for y in dense_elements(obj) do
+    if not obj[y][x] = x then
+      return false;
+    fi;
+  od;
+  return true;
+end;
+
+regular_elements := function(obj)
+  return Filtered([1..Size(obj)], x->is_regular(obj, x));
+end;
+
+is_subLalgebra := function(obj, subset)
+  local x, y;
+  for x in subset do
+    for y in subset do
+      if not obj[x][y] in subset then 
+        return false;
+      fi;
+    od;
+  od;
+  return true;
+end;
+
+is_invariant := function(obj, subset)
+  local x, y;
+  for x in [1..Size(obj)] do
+    for y in subset do
+      if not obj[x][y] in subset then 
+        return false;
+      fi;
+    od;
+  od;
+  return true;
+end;
+
