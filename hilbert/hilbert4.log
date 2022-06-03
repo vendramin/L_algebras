@@ -1,3 +1,3 @@
 Running savilerow. I found 6 solutions
 I constructed 6 Hilbert algebras in 746ms (= 0:00:00.746)
-gap> construct_hilbert(5);
+gap> 
